@@ -1,0 +1,85 @@
+---
+title: "Project 5: Group A"
+author: "October 12, 2016"
+date: "Due October 12, 2016 at 5:00pm"
+output:
+  html_document
+
+
+---
+
+<style type="text/css">
+.table {
+
+    width: 80%;
+    margin-left:10%; 
+    margin-right:10%;
+}
+</style>
+```{r,setup, echo=FALSE, cache=TRUE}
+## numbers >= 10^5 will be denoted in scientific notation,
+## and rounded to 2 digits
+options(scipen = 3, digits = 3)
+```
+
+
+
+
+#Project Goals:
+
+
+With this project we will be be working in small groups and on 2 different teams. 
+
+From 1:00 to 1:20pm meet as large groups (***A*** and ***B***), read through the problem and make sure everyone understands it. Set up different tasks to complete as small groups. It may help to have multiple groups work on the same task to see if they have similar codes. 
+
+From 1:20 to 2:30 pm work in your small group to complete your tasks. During this time you also will want to have large group meetings to bring together code. Test the code out and assign new tasks. It may help 
+
+
+From 2:30 - 3:15 wrap up the simulations for all of your problems. Make sure you have running code and that it works correctly. Clean your code up and get ready to present it. 
+
+Rest of class: Group A and Group B will both present their solutions to the class. 
+
+[Lab 5 Group A - Markdown](https://canvas.brown.edu/files/60630264/download?download_frd=1)
+
+
+ 
+# Simulation Studies
+
+1.  Write a function around the simulation code under drug effect sizes in notes, that produces measurements in  the drug and no drug groups. Your function should be called sim.drug.effect(), and  it should take two arguments:
+    - n, the number of subjects in each group, with a default value of 50
+    - mu.drug, the mean for the exponential distribution that defines the drug  tumor reduction measurements, with a default value of 2
+   
+Your function should return the average difference in tumor reduction between the subjects who received the drug, and those who didn't.   
+
+*(Note: this function should NOT call set.seed(), you want its results to be random)*
+
+
+2. For each value of n in between 5 and 200, perform the following. 
+    - Run sim.drug.effect() a total of 100 times, with the given value of n
+    - record the average difference in tumor reduction
+    - then count the number of successes, i.e., the number of times (out of 100) that this difference exceeds 100. 
+    - Make a line plot which shows the number of successes as a function of n. Label the axes appropriately. What is the smallest n for which the number of successes exceeds 95?
+    
+*(Hint: for this task, a double for() loop would work just fine ...)*
+
+
+3. Now suppose your drug company told you they only had enough money to enlist n=20 subjects in each of the drug / no drug groups, in their clinical trial. They then asked you the following question: how large would mu.drug have to be, the mean proportion of tumor reduction in the drug group, in orderto have probability 0.95 of a successful drug trial? Run a simulation, much like your simulation in problem 2, to answer this question. 
+
+*(Hint: now you will want to let mu.drug vary over a wide range, say 1.5 to 5, and for each value, simulate data with n=20 from the drug / no drug groups, compute difference of average tumor reduction percentages, etc.)*
+
+
+4. So, it turns out that the drug company can actually control mu.drug, the mean proportion of tumor reduction among the drug subject, by adjusting the dose concentration of some secret special chemical. But there is no free lunch: the higher concentration of this secret chemical, the more likely a subject is to have liver failure. In particular, suppose that:
+    - people on the drug die with probability sqrt(mu/4000)
+    - the FDA has a policy that if 2 subjects die in a clinical trial, then the trial is shut down
+    - in this case, the trial is clearly not counted as a success (even if the average difference in tumor reduction percentage was huge, between surviving members of the two groups)
+As in problem 3, suppose that the drug company only has enough money to enlist n=30 people in each of the drug / no drug groups in their clinical trial. Adapt your simulation from problem 3 to incorporate the fact that patients can die  from liver failure, in the drug group. Count the number of successes (out of  100) as a function of mu.drug. Is there any hope here? I.e., is there a value for which we have at least 95 successes?
+
+
+
+5. Suppose that the model for tumor reduction for non drug subjects is pretty accurate, but that for the drug subjects can be refined. Suppose in particular that there are three types of patients: 
+    - non-responders, making up 25% of the general population, for whom mu.drug is distributed as Unif(0,1)
+    - regular-responders, making up 65% of the population, for whom mu.drug = 2
+    - super-responders, making up 10% of the population, for whom mu.drug = 4 
+Update your function sim.drug.effect() from problem 1 to accommodate this more accurate model the drug group of patients. Rerun your simulation from problem 2 and answer the same questions as before. Does the required sample size n get smaller or bigger?
+
+*(Hint: for simulating from this more accurate model, you'll want to flip a coin each time to determine what type of patient you are looking at: a non-responder, # regular-responder, or super-response. The coin should be three-sided and have probabilities 0.24, 0.85, and 0.1 of landing on each side; you can use runif() to build such a coin ...)*
