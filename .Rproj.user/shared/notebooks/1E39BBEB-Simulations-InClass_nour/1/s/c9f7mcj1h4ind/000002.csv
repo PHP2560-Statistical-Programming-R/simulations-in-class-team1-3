@@ -1,0 +1,30 @@
+"0","function(maxhands, gambling) {"
+"0","  nloses <- 0"
+"0","  for (i in 1:5000) {"
+"0","    if (gambling(maxhand = maxhands)[2] < 1000) {"
+"0","      nloses <- nloses+1"
+"0","    }"
+"0","  }"
+"0","  prob_loses <- nloses / 5000"
+"0","  return(prob_loses)"
+"0","}"
+"1","function(maxhands, gambling) {
+"
+"1","  nloses <- 0
+"
+"1","  for (i in 1:5000) {
+"
+"1","    if (gambling(maxhand = maxhands)[2] < 1000) {
+"
+"1","      nloses <- nloses+1
+"
+"1","    }
+"
+"1","  }
+"
+"1","  prob_loses <- nloses / 5000
+"
+"1","  return(prob_loses)
+"
+"1","}
+"

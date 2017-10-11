@@ -32,46 +32,53 @@ With this project we will simulate a famous probability problem. This will not r
  1. **Gambler's Ruin**: Suppose you have a bankroll of $1000 and make bets of $100 on a fair game. By simulating the outcome directly for at most 5000 iterations of the game (or hands), estimate:
     a. the probability that you have "busted" (lost all your money) by the time you have placed your one hundredth bet. 
 ```{r}
-gambling <- function(bankroll =1000 , bet = 100 , winerate = .5, maxhands = 5000) {
-  outcome <- c(0,0,0)
+
+gambling <- function(bankroll = 1000, bet = 100, winrate = 0.5, maxhand = 5000 ){
   
-  for (i in 1:maxhands) {
-    outcome[3] = i
-    if (rbinom(1,1,winerate) == 1) {
-      bankroll= bankroll + bet
-    } 
-    else { bankroll = bankroll - bet}
-  if (bankroll == 0) {break}
-  if (i == 100) {
-    outcome[1] = bankroll
+  outcome <- c(0, 0, 0)
+
+for (i in 1:maxhand) {
+  if(rbinom(1,1,winrate) == 1) {
+    bankroll <- bankroll+bet
+  } 
+  else {
+      bankroll <- bankroll- bet
+    }
+    if (bankroll == 0 ) {break
+      }
+     outcome[3] <- i
+    if (i == 100) {
+      outcome[1] <- bankroll
+      }
+  if (i == 500) {
+    outcome[2] <- bankroll
   }
-  if (i == 500){
-    outcome[2] = bankroll
-  
-  }}
+  }
   return(outcome)
 }
-
 
 ```
 
 ```{r}
-function(maxhands, gambling) {
-  bankrupt <- 0
+bankrubt <- function(maxhands, gambling) {
+  nloses <- 0
   for (i in 1:5000) {
-    if (gambling(maxhand = maxhands)[3] < 500) {
-      bankrupt <- bankrupt+1
+    if (gambling(maxhand = maxhands)[2] < 1000) {
+      nloses <- nloses+1
     }
   }
-  prob_bankrupt <- bankrupt / 5000
-  return(prob_bankrup)
+  prob_loses <- nloses / 5000
+  return(prob_loses)
 }
+
+
 ```
 
     b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. 
     
 ```{r}
 
+bankrubt(500, gambling)
 
 ```
     c. the mean time you go bust, given that you go bust within the first 5000 hands.

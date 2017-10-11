@@ -56,16 +56,18 @@ gambling <- function(bankroll =1000 , bet = 100 , winerate = .5, maxhands = 5000
 ```
 
 ```{r}
-function(maxhands, gambling) {
+bankrub <- function(maxhands, gambling) {
   bankrupt <- 0
+  recorder <- matrix(0, 5000, 3)
+  names(recorder) <- c("bankroll100", "bankroll500", "numbankrupt")
   for (i in 1:5000) {
-    if (gambling(maxhand = maxhands)[3] < 500) {
-      bankrupt <- bankrupt+1
+    recorder[i,] = gambling(maxhands)
     }
-  }
-  prob_bankrupt <- bankrupt / 5000
-  return(prob_bankrup)
+  prob_bankrupt <- length(recorder$numbankrupt[recorder$numbankrupt < 500])/ 5000
+  return(prob_bankrupt)
 }
+  
+
 ```
 
     b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. 
