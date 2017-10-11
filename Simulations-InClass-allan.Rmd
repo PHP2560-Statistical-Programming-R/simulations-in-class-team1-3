@@ -136,30 +136,29 @@ var(result2)
 3. **Markov Chains**. Suppose you have a game where the probability of winning on your first hand is 48%; each time you win, that probability goes up by one percentage point for the next game (to a maximum of 100%, where it must stay), and each time you lose, it goes back down to 48%. Assume you cannot go bust and that the size of your wager is a constant $100.
     a. Is this a fair game? Simulate one hundred thousand sequential hands to determine the size of your return. Then repeat this simulation 99 more times to get a range of values to calculate the expectation.
 ```{r}
-run_markov<-function(bet, n, p=0.48) {
-  x <- 0 
+run_markov <- function(bet, n, p = 0.48) {
+  x <- 0
   init <- bet
-  while(n >= bet) { 
+  while (n >= bet) {
     game <- runif(1)
-    if(game <= p) {
+    if (game <= p) {
       n = n + bet
-      bet = (n+bet)*0.10
-    } else { 
+      bet = (n + bet) * 0.10
+    } else {
       n = n - bet
       bet = init
     }
-    x <- x+1
-    if(n < bet){
+    x <- x + 1
+    if (n < bet) {
       break
-      } 
-    if(x == 500){
+    }
+    if (x == 100000) { # this is enough
       break
-      } 
+    }
   }
-  times.played <- x 
   return(n)
 }
-result4<-replicate(100, run_markov(100,100))
+result4 <- replicate(100, run_markov(100, 100))
 mean(result4)
 ```
     b. Repeat this process but change the starting probability to a new value within 2% either way. Get the expected return after 100 repetitions. Keep exploring until you have a return value that is as fair as you can make it. Can you do this automatically?
