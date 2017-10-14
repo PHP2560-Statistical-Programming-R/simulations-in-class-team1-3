@@ -161,26 +161,26 @@ prob_bust = function(x, n){
 }
 result = simulate(0.5, 10000, 5000, Inf)#Gambling won't stop until go bust or play up to 5000 hands.
 prob_bust(result, 100)</code></pre>
-<pre><code>## [1] 0.3201</code></pre>
+<pre><code>## [1] 0.3194</code></pre>
 <pre><code>b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. </code></pre>
 <pre class="r"><code>prob_bust(result, 500)</code></pre>
-<pre><code>## [1] 0.6556</code></pre>
+<pre><code>## [1] 0.6481</code></pre>
 <pre><code>c. the mean time you go bust, given that you go bust within the first 5000 hands.</code></pre>
 <pre class="r"><code>go_bust = mean(result[,1][result[,2]==0])
 go_bust</code></pre>
-<pre><code>## [1] 527.1275</code></pre>
+<pre><code>## [1] 535.275</code></pre>
 <pre><code>d. the mean and variance of your bankroll after 100 hands (including busts).</code></pre>
 <pre class="r"><code>result_100 = simulate(0.5, 10000, 100, Inf)
 mean(result_100[,2])</code></pre>
-<pre><code>## [1] 996.64</code></pre>
+<pre><code>## [1] 992.66</code></pre>
 <pre class="r"><code>var(result_100[,2])</code></pre>
-<pre><code>## [1] 850145.7</code></pre>
+<pre><code>## [1] 841050.2</code></pre>
 <pre><code>e. the mean and variance of your bankroll after 500 hands (including busts).</code></pre>
 <pre class="r"><code>result_500 = simulate(0.5, 10000, 500, Inf)
 mean(result_500[,2])</code></pre>
-<pre><code>## [1] 982.52</code></pre>
+<pre><code>## [1] 987.22</code></pre>
 <pre class="r"><code>var(result_500[,2])</code></pre>
-<pre><code>## [1] 2612292</code></pre>
+<pre><code>## [1] 2613790</code></pre>
 <p>Note: you <em>must</em> stop playing if your player has gone bust. How will you handle this in the <code>for</code> loop?</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Repeat the previous problem with betting on black in American roulette, where the probability of winning on any spin is 18/38 for an even payout.</li>
@@ -189,27 +189,27 @@ mean(result_500[,2])</code></pre>
 <li>the probability that you have “busted” (lost all your money) by the time you have placed your one hundredth bet.</li>
 </ol>
 <pre class="r"><code>result_roulette = simulate(18/38, 10000, 5000, Inf)#Gambling won't stop until go bust or play up to 5000 hands.
-prob_bust(result, 100)</code></pre>
-<pre><code>## [1] 0.3201</code></pre>
+prob_bust(result_roulette, 100)</code></pre>
+<pre><code>## [1] 0.4981</code></pre>
 <pre><code>b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. </code></pre>
 <pre class="r"><code>prob_bust(result_roulette, 500)</code></pre>
-<pre><code>## [1] 0.9156</code></pre>
+<pre><code>## [1] 0.9188</code></pre>
 <pre><code>c. the mean time you go bust, given that you go bust within the first 5000 hands.</code></pre>
 <pre class="r"><code>go_bust = mean(result_roulette[,1][result_roulette[,2]==0])
 go_bust</code></pre>
-<pre><code>## [1] 191.922</code></pre>
+<pre><code>## [1] 187.728</code></pre>
 <pre><code>d. the mean and variance of your bankroll after 100 hands (including busts).</code></pre>
 <pre class="r"><code>result_100 = simulate(18/38, 10000, 100, Inf)
 mean(result_100[,2])</code></pre>
-<pre><code>## [1] 604.9</code></pre>
+<pre><code>## [1] 601.02</code></pre>
 <pre class="r"><code>var(result_100[,2])</code></pre>
-<pre><code>## [1] 591295.1</code></pre>
+<pre><code>## [1] 583605.3</code></pre>
 <pre><code>e. the mean and variance of your bankroll after 500 hands (including busts).</code></pre>
 <pre class="r"><code>result_500 = simulate(18/38, 10000, 500, Inf)
 mean(result_500[,2])</code></pre>
-<pre><code>## [1] 166.5</code></pre>
+<pre><code>## [1] 162.02</code></pre>
 <pre class="r"><code>var(result_500[,2])</code></pre>
-<pre><code>## [1] 415363.3</code></pre>
+<pre><code>## [1] 396889.2</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li><p><strong>Markov Chains</strong>. Suppose you have a game where the probability of winning on your first hand is 48%; each time you win, that probability goes up by one percentage point for the next game (to a maximum of 100%, where it must stay), and each time you lose, it goes back down to 48%. Assume you cannot go bust and that the size of your wager is a constant $100.</p>
 <ol style="list-style-type: lower-alpha">
@@ -240,10 +240,10 @@ expect = function(start_prob, change){
 }
 
 expect(0.48, 0.01)</code></pre>
-<pre><code>## [1] -197254</code></pre>
+<pre><code>## [1] -200494</code></pre>
 <pre><code>b. Repeat this process but change the starting probability to a new value within 2% either way. Get the expected return after 100 repetitions. Keep exploring until you have a return value that is as fair as you can make it. Can you do this automatically?</code></pre>
 <pre class="r"><code>expect(0.5, 0.01)</code></pre>
-<pre><code>## [1] 212648</code></pre>
+<pre><code>## [1] 249506</code></pre>
 <pre class="r"><code>test = seq(0.48, 0.50, 0.005)
 n = length(test)
 expect_series = vector(&quot;double&quot;,length = n)
@@ -251,7 +251,7 @@ for(i in 1:n){
   expect_series[i] = expect(test[i], 0.01)
 }
 expect_series</code></pre>
-<pre><code>## [1] -195868  -89114   10158  112314  386930</code></pre>
+<pre><code>## [1] -195802    3952   14090  127958  227646</code></pre>
 <pre class="r"><code>test1 = seq(0.485, 0.49, 0.001)
 n1 = length(test1)
 expect_series = vector(length = n1)
@@ -259,8 +259,8 @@ for(i in 1:n){
   expect_series[i] = expect(test1[i], 0.01)
 }
 expect_series</code></pre>
-<pre><code>## [1] -94056 -72984 -53590 -30464 135704      0</code></pre>
-<pre class="r"><code>#The final results is aroung 0.489 because the expected value is around 0.
+<pre><code>## [1] -93406 -75026  25918   8540  -7474      0</code></pre>
+<pre class="r"><code>#The final results is around 0.489 because the expected value is around 0.
 
 
 
@@ -287,8 +287,8 @@ for(i in 1:n){
   expect_series[i] = expect(0.48, test_increment[i])
 }
 expect_series</code></pre>
-<pre><code>##  [1] -195634 -176478  -88718  402760 1276658 1893006 3967392 5571970
-##  [9] 7014426 7898640 8493252</code></pre>
+<pre><code>##  [1] -196450  -99888   74694  485828  577058 2142734 2985438 5109096
+##  [9] 6588868 8296420 8722594</code></pre>
 <pre class="r"><code>#The appropriate increment may lie between 0.011 and 0.012
  
 
@@ -331,13 +331,13 @@ boot_ci = function(data, rep, fun){
   
 }
 boot_ci(data_flights, 1000, mean)</code></pre>
-<pre><code>##    2.5%    7.5% 
-## 36.3355 38.0570</code></pre>
+<pre><code>##   2.5%   7.5% 
+## 36.339 38.340</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>For problems 3b and 3c, you calculated a mean value. Because you saved these final results in a vector, use the bootstrap to estimate the variance of the return in each case for your final answer. Once you have these results, which game has the smaller variance in returns?</li>
 </ol>
 <pre class="r"><code>markov1 = replicate(100, simulate_markov(0.489, 0.01))
-markov2 = replicate(100, simulate_markov(0.48, 0.0115))
+markov2 = replicate(100, simulate_markov(0.48, 0.0015))
 bootcamp = function(data, rep, fun){
    n = length(data)
   sample_fun = vector(length = rep)
@@ -350,9 +350,10 @@ bootcamp = function(data, rep, fun){
 markov1_var = bootcamp(markov1, 1000, var)
 markov2_var = bootcamp(markov2, 1000, var)
 markov1_var</code></pre>
-<pre><code>## [1] 892648549</code></pre>
+<pre><code>## [1] 837633370</code></pre>
 <pre class="r"><code>markov2_var</code></pre>
-<pre><code>## [1] 1361126347</code></pre>
+<pre><code>## [1] 1202801277</code></pre>
+<pre class="r"><code>#The game in 3c has smaller variance in returns.</code></pre>
 </div>
 
 

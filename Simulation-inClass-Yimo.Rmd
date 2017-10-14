@@ -90,7 +90,7 @@ Note: you *must* stop playing if your player has gone bust. How will you handle 
  a. the probability that you have "busted" (lost all your money) by the time you have placed your one hundredth bet. 
 ```{r}
 result_roulette = simulate(18/38, 10000, 5000, Inf)#Gambling won't stop until go bust or play up to 5000 hands.
-prob_bust(result, 100)
+prob_bust(result_roulette, 100)
 
 ```
 
@@ -173,7 +173,7 @@ for(i in 1:n){
   expect_series[i] = expect(test1[i], 0.01)
 }
 expect_series
-#The final results is aroung 0.489 because the expected value is around 0.
+#The final results is around 0.489 because the expected value is around 0.
 
 
 
@@ -260,7 +260,7 @@ boot_ci(data_flights, 1000, mean)
 5. For problems 3b and 3c, you calculated a mean value. Because you saved these final results in a vector, use the bootstrap to estimate the variance of the return in each case for your final answer. Once you have these results, which game has the smaller variance in returns?
 ```{r}
 markov1 = replicate(100, simulate_markov(0.489, 0.01))
-markov2 = replicate(100, simulate_markov(0.48, 0.0115))
+markov2 = replicate(100, simulate_markov(0.48, 0.0015))
 bootcamp = function(data, rep, fun){
    n = length(data)
   sample_fun = vector(length = rep)
@@ -274,5 +274,6 @@ markov1_var = bootcamp(markov1, 1000, var)
 markov2_var = bootcamp(markov2, 1000, var)
 markov1_var
 markov2_var
+#The game in 3c has smaller variance in returns.
 ``` 
 
