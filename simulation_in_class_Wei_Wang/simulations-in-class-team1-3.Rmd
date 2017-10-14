@@ -33,50 +33,52 @@ With this project we will simulate a famous probability problem. This will not r
  1. **Gambler's Ruin**: Suppose you have a bankroll of $1000 and make bets of $100 on a fair game. By simulating the outcome directly for at most 5000 iterations of the game (or hands), estimate:
     a. the probability that you have "busted" (lost all your money) by the time you have placed your one hundredth bet. 
 ```{r, echo=TRUE}
-sim_function <- function(bankroll, bets, goal){
+sim_function <- function(bankroll, bets, goal, p){
   info <- 0
   while(bankroll >= bets & info < goal){
-    if (rbinom(1,1,0.5)==1) {
+    result <- runif(1)
+    if (result > p) {
    bankroll <- bankroll + bets
-     info <- info+1
   }else{
    bankroll <- bankroll - bets
-    info <- info + 1
   }
+   info <- info + 1
+   if (bets > bankroll) {break}
   }
-return(info)
+   return(info)
   }
-rep <- replicate(10000,sim_function(1000,100,5000))
+rep <- replicate(10000,sim_function(1000,100,5000, 0.5))
 length(which(rep <= 100))/10000
 
 ```
     b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. 
 ```{r, echo=TRUE}
 length(which(rep <= 500))/10000
-
 ```
     c. the mean time you go bust, given that you go bust within the first 5000 hands.
 ```{r, echo=FALSE}
-mean(rep)
-
+repp <- rep[which(rep < 5000)]
+mean(repp)
 ```
     d. the mean and variance of your bankroll after 100 hands (including busts).
 ```{r, echo=TRUE}
-my_bankroll <- function(bankroll, bets, goal){
-  info = 0
+my_bankroll <- function(bankroll, bets, goal, p){
+  info <- 0
     while(bankroll>=bets & info < goal){
-    if (rbinom(1,1,0.5)==1) {
+      result = runif(1)
+    if (result >p) {
    bankroll <- bankroll + bets
-     info <- info+1}
-      else{
+     }else{
    bankroll <- bankroll - bets
-    info <- info + 1
     }
-  }
+   info <- info + 1
+   if ( info == 100) {break}
+  if (bets > bankroll) {break}
+    }
   return(c(bankroll, info))
 }
 
-record <- matrix(replicate(10000,sim_function(1000,100,5000)),nrow = 10000,ncol = 2,byrow = T)
+record <- matrix(replicate(10000,sim_function(1000,100,5000, 0.5)),nrow = 10000,ncol = 2,byrow = T)
 colnames(record)<-c("bankroll","info")
 record <- as.data.frame(record)
 
@@ -86,6 +88,26 @@ var(record$bankroll[record$info > 100])
 ```
     e. the mean and variance of your bankroll after 500 hands (including busts).
 ```{r, echo=TRUE}
+my_bankroll <- function(bankroll, bets, goal, p){
+  info <- 0
+    while(bankroll>=bets & info < goal){
+      result = runif(1)
+    if (result >p) {
+   bankroll <- bankroll + bets
+     }else{
+   bankroll <- bankroll - bets
+    }
+   info <- info + 1
+   if ( info == 500) {break}
+  if (bets > bankroll) {break}
+    }
+  return(c(bankroll, info))
+}
+
+record <- matrix(replicate(10000,sim_function(1000,100,5000, 0.5)),nrow = 10000,ncol = 2,byrow = T)
+colnames(record)<-c("bankroll","info")
+record <- as.data.frame(record)
+
 mean(record$bankroll[record$info > 500])
 var(record$bankroll[record$info > 500])
 
@@ -93,7 +115,85 @@ var(record$bankroll[record$info > 500])
 Note: you *must* stop playing if your player has gone bust. How will you handle this in the `for` loop?
 
 2. Repeat the previous problem with betting on black in American roulette, where the probability of winning on any spin is 18/38 for an even payout.
-```{r}
+    a. the probability that you have "busted" (lost all your money) by the time you have placed your one hundredth bet. 
+```{r, echo=TRUE}
+sim_function <- function(bankroll, bets, goal, p){
+  info <- 0
+  while(bankroll >= bets & info < goal){
+    result <- runif(1)
+    if (result > p) {
+   bankroll <- bankroll + bets
+  }else{
+   bankroll <- bankroll - bets
+  }
+   info <- info + 1
+   if (bets > bankroll) {break}
+  }
+   return(info)
+  }
+rep <- replicate(10000,sim_function(1000,100,5000, 18/38))
+length(which(rep <= 100))/10000
+
+```
+    b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. 
+```{r, echo=TRUE}
+length(which(rep <= 500))/10000
+```
+    c. the mean time you go bust, given that you go bust within the first 5000 hands.
+```{r, echo=FALSE}
+repp <- rep[which(rep < 5000)]
+mean(repp)
+```
+    d. the mean and variance of your bankroll after 100 hands (including busts).
+```{r, echo=TRUE}
+my_bankroll <- function(bankroll, bets, goal, p){
+  info <- 0
+    while(bankroll>=bets & info < goal){
+      result = runif(1)
+    if (result >p) {
+   bankroll <- bankroll + bets
+     }else{
+   bankroll <- bankroll - bets
+    }
+   info <- info + 1
+   if ( info == 100) {break}
+  if (bets > bankroll) {break}
+    }
+  return(c(bankroll, info))
+}
+
+record <- matrix(replicate(10000,sim_function(1000,100,5000, 18/38)),nrow = 10000,ncol = 2,byrow = T)
+colnames(record)<-c("bankroll","info")
+record <- as.data.frame(record)
+
+mean(record$bankroll[record$info > 100])
+var(record$bankroll[record$info > 100])
+
+```
+    e. the mean and variance of your bankroll after 500 hands (including busts).
+```{r, echo=TRUE}
+my_bankroll <- function(bankroll, bets, goal, p){
+  info <- 0
+    while(bankroll>=bets & info < goal){
+      result = runif(1)
+    if (result >p) {
+   bankroll <- bankroll + bets
+     }else{
+   bankroll <- bankroll - bets
+    }
+   info <- info + 1
+   if ( info == 500) {break}
+  if (bets > bankroll) {break}
+    }
+  return(c(bankroll, info))
+}
+
+record <- matrix(replicate(10000,sim_function(1000,100,5000, 18/38)),nrow = 10000,ncol = 2,byrow = T)
+colnames(record)<-c("bankroll","info")
+record <- as.data.frame(record)
+
+mean(record$bankroll[record$info > 500])
+var(record$bankroll[record$info > 500])
 
 ```
 
@@ -102,7 +202,7 @@ Note: you *must* stop playing if your player has gone bust. How will you handle 
 ```{r, echo=TRUE}
 # It is not a fair game since the simulated expectation is a negative value.
 Markov_Simulation <- function (wager, org_prob, prob_change, goals) {
-  info = 1
+  info = 0
   bankroll = 0
   in_game_prob = org_prob
   while (info <= goals){
@@ -132,15 +232,31 @@ mean(Markov_Simulation_100)
 ```
     b. Repeat this process but change the starting probability to a new value within 2% either way. Get the expected return after 100 repetitions. Keep exploring until you have a return value that is as fair as you can make it. Can you do this automatically?
 ```{r, echo=TRUE}
-my_fair_prob <- function(p){
-  mean <- mean(replicate(100,Markov_Simulation(100,p,0.01, 100000)))
-while(mean < 0){
-  p=p + 0.01
-mean <- mean(replicate(100,Markov_Simulation(100,p, 0.01, 100000)))
+# The expection is less than 0 when the probability is 49%.
+mean(replicate(100,Markov_Simulation(100,0.49,0.01,100000)))
+# The expection is greater than 0 when the probability is 50%.
+mean(replicate(100,Markov_Simulation(100,0.50,0.01,100000)))
+
+test = seq(0.491, 0.499, 0.001)
+n = length(test)
+expect_series = vector(length = n)
+for(i in 1:n){
+  expect_series[i] = mean(replicate(100,Markov_Simulation(100,test[i], 0.01,100000)))
 }
-return(p)
-}
-my_fair_prob(0.46)
+expect_series
+#The final results is between 0.499 and 0.500 because the expected value is around 0.
+```
+```{r}
+# To do this automatically. It may need a long time.
+# my_fair_prob <- function(p){
+#  mean <- mean(replicate(100,Markov_Simulation(100,p,0.01, 100000)))
+# while(mean < 0){
+#  p=p + 0.001
+# mean <- mean(replicate(100,Markov_Simulation(100,p, 0.01, 100000)))
+# }
+# return(p)
+# }
+# my_fair_prob(0.46)
 ```
     c. Repeat again, keeping the initial probability at 48%, but this time change the probability increment to a value different from 1%. Get the expected return after 100 repetitions. Keep changing this value until you have a return value that is as fair as you can make it. 
 ```{r, echo=TRUE}
@@ -170,5 +286,38 @@ The steps of this process are:
   e. The upper bound of a 95% CI will be the 0.975 percentile
 
 Make a function called `boot_ci` which calculates the 95% confidence interval in this manner. 
+```{r, echo=TRUE}
+boot_ci <- function(data, rep, fun){
+  n <- length(data)
+  sample_fun <- vector(length = rep)
+  for(i in 1:rep){
+    samples <- sample(data, n, replace = T, prob = NULL)
+    sample_fun[i] <- fun(samples)
+  }
+  return(c(quantile(sample_fun, 0.025), quantile(sample_fun, 0.075)))
+  
+}
+
+#Example:
+data_flights <- cars$dist
+boot_ci(data_flights, 1000, mean)
+```
 
 5. For problems 3b and 3c, you calculated a mean value. Because you saved these final results in a vector, use the bootstrap to estimate the variance of the return in each case for your final answer. Once you have these results, which game has the smaller variance in returns?
+```{r, echo=TRUE}
+markov1 <- replicate(100, Markov_Simulation(100,0.4995,0.01,100000))
+markov2 <- replicate(100, Markov_Simulation(100,0.48,0.006,100000))
+bootcamp <- function(data, rep, fun){
+   n = length(data)
+  sample_fun = vector(length = rep)
+  for(i in 1:rep){
+    samples = sample(data, n, replace = T, prob = NULL)
+    sample_fun[i] = fun(samples)
+  }
+  return(fun(samples))
+}
+markov1_var = bootcamp(markov1, 1000, var)
+markov2_var = bootcamp(markov2, 1000, var)
+markov1_var
+markov2_var
+```

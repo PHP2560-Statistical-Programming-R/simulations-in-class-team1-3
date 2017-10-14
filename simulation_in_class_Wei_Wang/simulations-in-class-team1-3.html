@@ -140,58 +140,158 @@ $(document).ready(function () {
 <li>the probability that you have “busted” (lost all your money) by the time you have placed your one hundredth bet.</li>
 </ol></li>
 </ol>
-<pre class="r"><code>sim_function &lt;- function(bankroll, bets, goal){
+<pre class="r"><code>sim_function &lt;- function(bankroll, bets, goal, p){
   info &lt;- 0
   while(bankroll &gt;= bets &amp; info &lt; goal){
-    if (rbinom(1,1,0.5)==1) {
+    result &lt;- runif(1)
+    if (result &gt; p) {
    bankroll &lt;- bankroll + bets
-     info &lt;- info+1
   }else{
    bankroll &lt;- bankroll - bets
-    info &lt;- info + 1
   }
+   info &lt;- info + 1
+   if (bets &gt; bankroll) {break}
   }
-return(info)
+   return(info)
   }
-rep &lt;- replicate(10000,sim_function(1000,100,5000))
+rep &lt;- replicate(10000,sim_function(1000,100,5000, 0.5))
 length(which(rep &lt;= 100))/10000</code></pre>
-<pre><code>## [1] 0.3245</code></pre>
+<pre><code>## [1] 0.3201</code></pre>
 <pre><code>b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. </code></pre>
 <pre class="r"><code>length(which(rep &lt;= 500))/10000</code></pre>
-<pre><code>## [1] 0.6576</code></pre>
+<pre><code>## [1] 0.654</code></pre>
 <pre><code>c. the mean time you go bust, given that you go bust within the first 5000 hands.</code></pre>
-<pre><code>## [1] 1035.824</code></pre>
+<pre><code>## [1] 527.9234</code></pre>
 <pre><code>d. the mean and variance of your bankroll after 100 hands (including busts).</code></pre>
-<pre class="r"><code>my_bankroll &lt;- function(bankroll, bets, goal){
-  info = 0
+<pre class="r"><code>my_bankroll &lt;- function(bankroll, bets, goal, p){
+  info &lt;- 0
     while(bankroll&gt;=bets &amp; info &lt; goal){
-    if (rbinom(1,1,0.5)==1) {
+      result = runif(1)
+    if (result &gt;p) {
    bankroll &lt;- bankroll + bets
-     info &lt;- info+1}
-      else{
+     }else{
    bankroll &lt;- bankroll - bets
-    info &lt;- info + 1
     }
-  }
+   info &lt;- info + 1
+   if ( info == 100) {break}
+  if (bets &gt; bankroll) {break}
+    }
   return(c(bankroll, info))
 }
 
-record &lt;- matrix(replicate(10000,sim_function(1000,100,5000)),nrow = 10000,ncol = 2,byrow = T)
+record &lt;- matrix(replicate(10000,sim_function(1000,100,5000, 0.5)),nrow = 10000,ncol = 2,byrow = T)
 colnames(record)&lt;-c(&quot;bankroll&quot;,&quot;info&quot;)
 record &lt;- as.data.frame(record)
 
 mean(record$bankroll[record$info &gt; 100])</code></pre>
-<pre><code>## [1] 1041.564</code></pre>
+<pre><code>## [1] 997.1352</code></pre>
 <pre class="r"><code>var(record$bankroll[record$info &gt; 100])</code></pre>
-<pre><code>## [1] 2708440</code></pre>
+<pre><code>## [1] 2564339</code></pre>
 <pre><code>e. the mean and variance of your bankroll after 500 hands (including busts).</code></pre>
-<pre class="r"><code>mean(record$bankroll[record$info &gt; 500])</code></pre>
-<pre><code>## [1] 1084.926</code></pre>
+<pre class="r"><code>my_bankroll &lt;- function(bankroll, bets, goal, p){
+  info &lt;- 0
+    while(bankroll&gt;=bets &amp; info &lt; goal){
+      result = runif(1)
+    if (result &gt;p) {
+   bankroll &lt;- bankroll + bets
+     }else{
+   bankroll &lt;- bankroll - bets
+    }
+   info &lt;- info + 1
+   if ( info == 500) {break}
+  if (bets &gt; bankroll) {break}
+    }
+  return(c(bankroll, info))
+}
+
+record &lt;- matrix(replicate(10000,sim_function(1000,100,5000, 0.5)),nrow = 10000,ncol = 2,byrow = T)
+colnames(record)&lt;-c(&quot;bankroll&quot;,&quot;info&quot;)
+record &lt;- as.data.frame(record)
+
+mean(record$bankroll[record$info &gt; 500])</code></pre>
+<pre><code>## [1] 1070.745</code></pre>
 <pre class="r"><code>var(record$bankroll[record$info &gt; 500])</code></pre>
-<pre><code>## [1] 2819660</code></pre>
+<pre><code>## [1] 2815604</code></pre>
 <p>Note: you <em>must</em> stop playing if your player has gone bust. How will you handle this in the <code>for</code> loop?</p>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Repeat the previous problem with betting on black in American roulette, where the probability of winning on any spin is 18/38 for an even payout.</p></li>
+<li>Repeat the previous problem with betting on black in American roulette, where the probability of winning on any spin is 18/38 for an even payout.
+<ol style="list-style-type: lower-alpha">
+<li>the probability that you have “busted” (lost all your money) by the time you have placed your one hundredth bet.</li>
+</ol></li>
+</ol>
+<pre class="r"><code>sim_function &lt;- function(bankroll, bets, goal, p){
+  info &lt;- 0
+  while(bankroll &gt;= bets &amp; info &lt; goal){
+    result &lt;- runif(1)
+    if (result &gt; p) {
+   bankroll &lt;- bankroll + bets
+  }else{
+   bankroll &lt;- bankroll - bets
+  }
+   info &lt;- info + 1
+   if (bets &gt; bankroll) {break}
+  }
+   return(info)
+  }
+rep &lt;- replicate(10000,sim_function(1000,100,5000, 18/38))
+length(which(rep &lt;= 100))/10000</code></pre>
+<pre><code>## [1] 0.1866</code></pre>
+<pre><code>b. the probability that you have busted by the time you have placed your five hundredth bet by simulating the outcome directly. </code></pre>
+<pre class="r"><code>length(which(rep &lt;= 500))/10000</code></pre>
+<pre><code>## [1] 0.3289</code></pre>
+<pre><code>c. the mean time you go bust, given that you go bust within the first 5000 hands.</code></pre>
+<pre><code>## [1] 183.1323</code></pre>
+<pre><code>d. the mean and variance of your bankroll after 100 hands (including busts).</code></pre>
+<pre class="r"><code>my_bankroll &lt;- function(bankroll, bets, goal, p){
+  info &lt;- 0
+    while(bankroll&gt;=bets &amp; info &lt; goal){
+      result = runif(1)
+    if (result &gt;p) {
+   bankroll &lt;- bankroll + bets
+     }else{
+   bankroll &lt;- bankroll - bets
+    }
+   info &lt;- info + 1
+   if ( info == 100) {break}
+  if (bets &gt; bankroll) {break}
+    }
+  return(c(bankroll, info))
+}
+
+record &lt;- matrix(replicate(10000,sim_function(1000,100,5000, 18/38)),nrow = 10000,ncol = 2,byrow = T)
+colnames(record)&lt;-c(&quot;bankroll&quot;,&quot;info&quot;)
+record &lt;- as.data.frame(record)
+
+mean(record$bankroll[record$info &gt; 100])</code></pre>
+<pre><code>## [1] 3375.245</code></pre>
+<pre class="r"><code>var(record$bankroll[record$info &gt; 100])</code></pre>
+<pre><code>## [1] 5222186</code></pre>
+<pre><code>e. the mean and variance of your bankroll after 500 hands (including busts).</code></pre>
+<pre class="r"><code>my_bankroll &lt;- function(bankroll, bets, goal, p){
+  info &lt;- 0
+    while(bankroll&gt;=bets &amp; info &lt; goal){
+      result = runif(1)
+    if (result &gt;p) {
+   bankroll &lt;- bankroll + bets
+     }else{
+   bankroll &lt;- bankroll - bets
+    }
+   info &lt;- info + 1
+   if ( info == 500) {break}
+  if (bets &gt; bankroll) {break}
+    }
+  return(c(bankroll, info))
+}
+
+record &lt;- matrix(replicate(10000,sim_function(1000,100,5000, 18/38)),nrow = 10000,ncol = 2,byrow = T)
+colnames(record)&lt;-c(&quot;bankroll&quot;,&quot;info&quot;)
+record &lt;- as.data.frame(record)
+
+mean(record$bankroll[record$info &gt; 500])</code></pre>
+<pre><code>## [1] 3355.685</code></pre>
+<pre class="r"><code>var(record$bankroll[record$info &gt; 500])</code></pre>
+<pre><code>## [1] 5233008</code></pre>
+<ol start="3" style="list-style-type: decimal">
 <li><strong>Markov Chains</strong>. Suppose you have a game where the probability of winning on your first hand is 48%; each time you win, that probability goes up by one percentage point for the next game (to a maximum of 100%, where it must stay), and each time you lose, it goes back down to 48%. Assume you cannot go bust and that the size of your wager is a constant $100.
 <ol style="list-style-type: lower-alpha">
 <li>Is this a fair game? Simulate one hundred thousand sequential hands to determine the size of your return. Then repeat this simulation 99 more times to get a range of values to calculate the expectation.</li>
@@ -199,7 +299,7 @@ mean(record$bankroll[record$info &gt; 100])</code></pre>
 </ol>
 <pre class="r"><code># It is not a fair game since the simulated expectation is a negative value.
 Markov_Simulation &lt;- function (wager, org_prob, prob_change, goals) {
-  info = 1
+  info = 0
   bankroll = 0
   in_game_prob = org_prob
   while (info &lt;= goals){
@@ -221,22 +321,37 @@ Markov_Simulation &lt;- function (wager, org_prob, prob_change, goals) {
 }
 
 Markov_Simulation(100, .48, .01, 100000)</code></pre>
-<pre><code>## [1] -419400</code></pre>
+<pre><code>## [1] -428300</code></pre>
 <pre class="r"><code>Markov_Simulation_100 &lt;- replicate(100, Markov_Simulation(100, .48, .01, 100000))
 
 mean(Markov_Simulation_100)</code></pre>
-<pre><code>## [1] -402152</code></pre>
+<pre><code>## [1] -394864</code></pre>
 <pre><code>b. Repeat this process but change the starting probability to a new value within 2% either way. Get the expected return after 100 repetitions. Keep exploring until you have a return value that is as fair as you can make it. Can you do this automatically?</code></pre>
-<pre class="r"><code>my_fair_prob &lt;- function(p){
-  mean &lt;- mean(replicate(100,Markov_Simulation(100,p,0.01, 100000)))
-while(mean &lt; 0){
-  p=p + 0.01
-mean &lt;- mean(replicate(100,Markov_Simulation(100,p, 0.01, 100000)))
+<pre class="r"><code># The expection is less than 0 when the probability is 49%.
+mean(replicate(100,Markov_Simulation(100,0.49,0.01,100000)))</code></pre>
+<pre><code>## [1] -210828</code></pre>
+<pre class="r"><code># The expection is greater than 0 when the probability is 50%.
+mean(replicate(100,Markov_Simulation(100,0.50,0.01,100000)))</code></pre>
+<pre><code>## [1] 1140</code></pre>
+<pre class="r"><code>test = seq(0.491, 0.499, 0.001)
+n = length(test)
+expect_series = vector(length = n)
+for(i in 1:n){
+  expect_series[i] = mean(replicate(100,Markov_Simulation(100,test[i], 0.01,100000)))
 }
-return(p)
-}
-my_fair_prob(0.46)</code></pre>
-<pre><code>## [1] 0.51</code></pre>
+expect_series</code></pre>
+<pre><code>## [1] -183566 -160924 -137318 -123830 -100602  -86032  -59232  -42596  -24282</code></pre>
+<pre class="r"><code>#The final results is between 0.499 and 0.500 because the expected value is around 0.</code></pre>
+<pre class="r"><code># To do this automatically. It may need a long time.
+# my_fair_prob &lt;- function(p){
+#  mean &lt;- mean(replicate(100,Markov_Simulation(100,p,0.01, 100000)))
+# while(mean &lt; 0){
+#  p=p + 0.001
+# mean &lt;- mean(replicate(100,Markov_Simulation(100,p, 0.01, 100000)))
+# }
+# return(p)
+# }
+# my_fair_prob(0.46)</code></pre>
 <pre><code>c. Repeat again, keeping the initial probability at 48%, but this time change the probability increment to a value different from 1%. Get the expected return after 100 repetitions. Keep changing this value until you have a return value that is as fair as you can make it. </code></pre>
 <pre class="r"><code>my_fair_change &lt;- function(p,i){
   mean &lt;- mean(replicate(100,Markov_Simulation(100,p,i,100000)))
@@ -261,9 +376,42 @@ my_fair_change(0.48,0)</code></pre>
 <li>The upper bound of a 95% CI will be the 0.975 percentile</li>
 </ol>
 <p>Make a function called <code>boot_ci</code> which calculates the 95% confidence interval in this manner.</p>
+<pre class="r"><code>boot_ci &lt;- function(data, rep, fun){
+  n &lt;- length(data)
+  sample_fun &lt;- vector(length = rep)
+  for(i in 1:rep){
+    samples &lt;- sample(data, n, replace = T, prob = NULL)
+    sample_fun[i] &lt;- fun(samples)
+  }
+  return(c(quantile(sample_fun, 0.025), quantile(sample_fun, 0.075)))
+  
+}
+
+#Example:
+data_flights &lt;- cars$dist
+boot_ci(data_flights, 1000, mean)</code></pre>
+<pre><code>##  2.5%  7.5% 
+## 35.56 37.24</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>For problems 3b and 3c, you calculated a mean value. Because you saved these final results in a vector, use the bootstrap to estimate the variance of the return in each case for your final answer. Once you have these results, which game has the smaller variance in returns?</li>
 </ol>
+<pre class="r"><code>markov1 &lt;- replicate(100, Markov_Simulation(100,0.4995,0.01,100000))
+markov2 &lt;- replicate(100, Markov_Simulation(100,0.48,0.006,100000))
+bootcamp &lt;- function(data, rep, fun){
+   n = length(data)
+  sample_fun = vector(length = rep)
+  for(i in 1:rep){
+    samples = sample(data, n, replace = T, prob = NULL)
+    sample_fun[i] = fun(samples)
+  }
+  return(fun(samples))
+}
+markov1_var = bootcamp(markov1, 1000, var)
+markov2_var = bootcamp(markov2, 1000, var)
+markov1_var</code></pre>
+<pre><code>## [1] 1152136873</code></pre>
+<pre class="r"><code>markov2_var</code></pre>
+<pre><code>## [1] 932833434</code></pre>
 </div>
 
 
