@@ -1,10 +1,10 @@
 ---
 title: "Simulations Pre-Class Project"
-date: "Due March 13, 2017 at 5:00pm"
 output:
-  html_document
-
-
+  word_document: default
+  pdf_document: default
+  html_document: default
+date: "Due March 13, 2017 at 5:00pm"
 ---
 
 <style type="text/css">
@@ -141,7 +141,7 @@ mean(replicate(100,markov(start.p,inc.p)),na.rm=TRUE) - start
 # NOT FAIR. EXPECTED VALUE IS NEGATIVE COMPATED TO STARTING AMOUNT
 ```
     b. Repeat this process but change the starting probability to a new value within 2% either way. Get the expected return after 100 repetitions. Keep exploring until you have a return value that is as fair as you can make it. Can you do this automatically?
-```{r}
+```{r, eval=FALSE}
 
 start<-500000
 inc.p<-0.01
@@ -150,7 +150,7 @@ expected.val<- -100000
 a<-0.488
 b<-0.49
 
-while(!between(expected.val,-25000,25000)) {
+#while(!between(expected.val,-25000,25000)) {
     midpoint <- (a+b)/2
     start.p <- midpoint  
     expected.val<-mean(replicate(100,markov(start.p,inc.p)),na.rm=TRUE) - start
@@ -166,7 +166,7 @@ expected.val
 ```
     c. Repeat again, keeping the initial probability at 48%, but this time change the probability increment to a value different from 1%. Get the expected return after 100 repetitions. Keep changing this value until you have a return value that is as fair as you can make it. 
     
-```{r}
+```{r, eval=FALSE}
 start<-500000
 inc.p<-0.01
 expected.val<- -100000
@@ -175,7 +175,7 @@ start.p<-0.48
 a<-0.012
 b<-0.013
 
-while(!between(expected.val,-25000,25000)) {
+#while(!between(expected.val,-25000,25000)) {
     midpoint <- (a+b)/2
     inc.p <- midpoint  
     expected.val<-mean(replicate(100,markov(start.p,inc.p)),na.rm=TRUE) - start
